@@ -10,12 +10,22 @@ const Formulario = ({ pacientes, setPacientes, paciente }) => {
 
   const [error, seterror] = useState(false);
 
-  const generarId =()=>{
-    const random = Math.random().toString(36).substr(2);
-    const fecha = Date.now().toString(36)
+  useEffect(() => {
+    if (Object.keys(paciente).length > 0) {
+      setnombre(paciente.nombre)
+      setPropietario(paciente.propietario)
+      setemail(paciente.email)
+      setalta(alta)
+      setDescripcion(descripcion)
+    } 
+  }, [paciente]);
 
-    return random + fecha
-  }
+  const generarId = () => {
+    const random = Math.random().toString(36).substr(2);
+    const fecha = Date.now().toString(36);
+
+    return random + fecha;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,7 +42,7 @@ const Formulario = ({ pacientes, setPacientes, paciente }) => {
       email,
       alta,
       descripcion,
-      id: generarId()
+      id: generarId(),
     };
 
     // console.log(objetoPaciente);
@@ -138,7 +148,7 @@ const Formulario = ({ pacientes, setPacientes, paciente }) => {
         </div>
 
         <button className="bg-indigo-600 cursor-pointer w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 ">
-          Agregar paciente
+          {paciente.id? 'Editar Paciente' : 'Agregar Paciente' }
         </button>
       </form>
     </div>
