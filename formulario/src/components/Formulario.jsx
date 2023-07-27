@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Errores from "./Errores";
 
-const Formulario = ({ pacientes, setPacientes, paciente }) => {
+const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
   const [nombre, setnombre] = useState("");
   const [propietario, setPropietario] = useState("");
   const [email, setemail] = useState("");
@@ -12,12 +12,12 @@ const Formulario = ({ pacientes, setPacientes, paciente }) => {
 
   useEffect(() => {
     if (Object.keys(paciente).length > 0) {
-      setnombre(paciente.nombre)
-      setPropietario(paciente.propietario)
-      setemail(paciente.email)
-      setalta(alta)
-      setDescripcion(descripcion)
-    } 
+      setnombre(paciente.nombre);
+      setPropietario(paciente.propietario);
+      setemail(paciente.email);
+      setalta(alta);
+      setDescripcion(descripcion);
+    }
   }, [paciente]);
 
   const generarId = () => {
@@ -42,12 +42,23 @@ const Formulario = ({ pacientes, setPacientes, paciente }) => {
       email,
       alta,
       descripcion,
-      id: generarId(),
     };
 
-    // console.log(objetoPaciente);
+    if (paciente.id) {
+      //Editando Registro
+      objetoPaciente.id = paciente.id;
 
-    setPacientes([...pacientes, objetoPaciente]);
+      const pacientesActualizados = pacientes.map((pacienteState) =>
+        pacienteState.id === paciente.id ? objetoPaciente : pacienteState
+      );
+
+      setPacientes(pacientesActualizados);
+      setPaciente({})
+    } else {
+      //Nuevo Registr
+      objetoPaciente.id = generarId();
+      setPacientes([...pacientes, objetoPaciente]);
+    }
 
     //Reiniciar Frmulario
     setnombre("");
@@ -148,7 +159,7 @@ const Formulario = ({ pacientes, setPacientes, paciente }) => {
         </div>
 
         <button className="bg-indigo-600 cursor-pointer w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 ">
-          {paciente.id? 'Editar Paciente' : 'Agregar Paciente' }
+          {paciente.id ? "Editar Paciente" : "Agregar Paciente"}
         </button>
       </form>
     </div>
